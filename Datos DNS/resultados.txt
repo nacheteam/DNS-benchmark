@@ -1,0 +1,4 @@
+Obteniendo el mejor resultado...
+291461 servidores DNS han sido analizados.
+El mejor dns ha sido 261142 -->127.112.95.187 con una media de tiempo de 0.065 ms
+Ha tardado en total 8409.990224838257 segundos.
