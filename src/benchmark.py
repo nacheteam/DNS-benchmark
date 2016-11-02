@@ -23,7 +23,7 @@ class Main(object):
         DNS.get_nombres_ip(archivo_dns)
         archivo_dns.close()
 
-    #Fun
+    #Función que se encarga del multithreading.
     def pinging_function():
         n=len(DNS.vector_nombres)
         num_hebras=0
@@ -45,11 +45,13 @@ class Main(object):
             end = time.time()
         print("La tanda ha tardado " + str(end-start) + " segundos.")
 
+    #Encuentra el mejor resultado de los obtenidos en el ping.
     def find_best_result():
         os.system("clear")
         DNS.sort_DNS(DNS.medias, DNS.nombres, DNS.ips)
         DNS.remove_bad_data(DNS.medias, DNS.nombres, DNS.ips)
 
+    #Da el mejor resultado encontrado.
     def give_best_result():
         n=len(DNS.vector_nombres)
         os.system("clear")
@@ -57,12 +59,14 @@ class Main(object):
         print("El mejor dns ha sido " + DNS.nombres[0] + "-->" + DNS.ips[0] + " con una media de tiempo de " + str(DNS.medias[0]) + " ms")
         os.system("rm -rf __pycache__/")
 
+    #Escribe los errores encontrados en un fichero externo.
     def create_error_log():
         error_file = open("error_log.txt", "r+")
         for element in DNS.errores:
             error_file.write(element)
         print("Fin de creación del log de erorres")
 
+    #Función a ejecutar para llevar a cabo el programa.
     def main():
         start = time.time()
         Main.begining_function()
