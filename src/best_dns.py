@@ -21,6 +21,8 @@ class DNS(object):
     medias_nombres_ips=[]
     errores = []
 
+    testing_webs = ["www.google.com", "www.youtube.com", "www.amazon.com", "www.wikipedia.org", "www.twitter.com", "www.linkedin.com", "www.msn.com", "www.reddit.com", "www.netflix.com", "www.github.com"]
+
     cerrojo = threading.Lock()  #Cerrojo para la concurrencia de procesos.
     cerrojo2 = threading.Lock()
 
@@ -57,13 +59,46 @@ class DNS(object):
                 aux = mitad[mitad.find("/")+1:]
                 media = aux[:aux.find("/")]
 
+            #dig_time = DNS.average_querys(dir_ip)
+            dig_time = DNS.worst_query(dir_ip)
+
             with DNS.cerrojo:
                 if isfloat(media):
-                    t = (float(media), str(nombre), str(dir_ip))
+                    t = (float(dig_time), str(nombre), str(dir_ip), float(media))
                     DNS.medias_nombres_ips+=[t]
         else:
             with DNS.cerrojo2:
                 DNS.errores.append("Hubo un error con el dns de nombre " + nombre + " y de dirección ip: " + dir_ip + "--->" + resultado_dig)
+
+    #Hace una query al dns con ip dada y devuelve el tiempo medio de query con las páginas web definidas en la clase.
+    def average_querys(dir_ip):
+        total = 0
+        for web_page in DNS.testing_webs:
+            comando = "dig " + dir_ip + " " + web_page + " | tail -5 | head -1"
+            dig = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE)
+            for line in dig.stdout:
+                resultado = str(line)
+            slice1 = resultado[resultado.find(":")+2:]
+            dig_time = slice1[:slice1.find(" ")]
+            dig_time = float(dig_time)
+            total+=dig_time
+        dig_media = float(total/len(DNS.testing_webs))
+        return dig_media
+
+    #Hace uso de dig para conseguir el tiempo de query de las paginas webs dadas. Se queda con el peor tiempo de query.
+    def worst_query(dir_ip):
+        worst = 0
+        for web_page in DNS.testing_webs:
+            comando = "dig " + dir_ip + " " + web_page + " | tail -5 | head -1"
+            dig = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE)
+            for line in dig.stdout:
+                resultado = str(line)
+            slice1 = resultado[resultado.find(":")+2:]
+            dig_time = slice1[:slice1.find(" ")]
+            dig_time = float(dig_time)
+            if worst<dig_time:
+                worst=dig_time
+        return worst
 
     #Con el vector de medias final, el de nombre y el de ips la función se encarga de ordenar el vector de medias de menor a mayor y el resto de los vectores se ordenan en consonancia con ello.
     def sort_DNS(medias_nombres_ips):

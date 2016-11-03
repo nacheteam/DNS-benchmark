@@ -56,7 +56,8 @@ class Main(object):
         n=len(DNS.vector_nombres)
         os.system("clear")
         print(str(n) + " servidores DNS han sido analizados.")
-        print("El mejor dns ha sido " + DNS.medias_nombres_ips[0][1] + "-->" + DNS.medias_nombres_ips[0][2] + " con una media de tiempo de " + str(DNS.medias_nombres_ips[0][0]) + " ms")
+        print("El mejor dns ha sido " + DNS.medias_nombres_ips[0][1] + "-->" + DNS.medias_nombres_ips[0][2] + " con peor tiempo de " + str(DNS.medias_nombres_ips[0][0]) + " ms para querys.")
+        print("Su media de ping es: " + str(DNS.medias_nombres_ips[0][3]))
         os.system("rm -rf __pycache__/")
 
     #Escribe los errores encontrados en un fichero externo.
@@ -70,9 +71,9 @@ class Main(object):
     def main():
         start = time.time()
         Main.begining_function()
-        print("Comenzando el ping a los candidatos DNS...")
+        print("Comenzando la obtención de servidores...")
         Main.get_names()
-        print("Comenzando las tandas de pings!")
+        print("¡Benchmark en progreso!")
         Main.pinging_function()
         print("Obteniendo el mejor resultado...")
         Main.find_best_result()
@@ -80,6 +81,9 @@ class Main(object):
         Main.create_error_log()
         end = time.time()
         print("En total ha tardado " + str(end-start) + " segundos.")
+        print("Las webs usadas han sido:")
+        for web in DNS.testing_webs:
+            print(web)
         print("Fin de creación del log de erorres")
 
 
