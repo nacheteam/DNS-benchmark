@@ -11,7 +11,7 @@ class Main(object):
     #Función que pide al usuario el número de hebras que quiere que se utilicen.
     def begining_function():
         os.system("clear")
-        os.system("rm error_log.txt")
+        os.system("rm error_log.txt 2> /dev/null")
         os.system("touch error_log.txt")
         Main.NUM_MAX_HEBRAS = input("Introduzca el número de hebras que quiere usar de manera concurrente: ")
         Main.NUM_MAX_HEBRAS = int(Main.NUM_MAX_HEBRAS)
@@ -57,15 +57,20 @@ class Main(object):
         os.system("clear")
         print(str(n) + " servidores DNS han sido analizados.")
         print("El mejor dns ha sido " + DNS.medias_nombres_ips[0][1] + "-->" + DNS.medias_nombres_ips[0][2] + " con peor tiempo de " + str(DNS.medias_nombres_ips[0][0]) + " ms para querys.")
-        print("Su media de ping es: " + str(DNS.medias_nombres_ips[0][3]))
+        print("Su media de ping es: " + str(DNS.medias_nombres_ips[0][3]) + " ms")
         os.system("rm -rf __pycache__/")
 
     #Escribe los errores encontrados en un fichero externo.
     def create_error_log():
-        error_file = open("error_log.txt", "r+")
-        for element in DNS.errores:
-            error_file.write(element)
-        print("Fin de creación del log de erorres")
+        if len(DNS.errores)==0:
+            os.system("rm error_log.txt")
+            print("No hubo errores.")
+        else:
+            error_file = open("error_log.txt", "r+")
+            for element in DNS.errores:
+                error_file.write(element)
+            print("Fin de creación del log de erorres")
+            error_file.close()
 
     #Función a ejecutar para llevar a cabo el programa.
     def main():
@@ -73,7 +78,7 @@ class Main(object):
         Main.begining_function()
         print("Comenzando la obtención de servidores...")
         Main.get_names()
-        print("¡Benchmark en progreso!")
+        print("Benchmark en progreso, " + str(len(DNS.vector_nombres)) + " han sido encontrados en el fichero.")
         Main.pinging_function()
         print("Obteniendo el mejor resultado...")
         Main.find_best_result()
