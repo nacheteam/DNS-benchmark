@@ -38,10 +38,10 @@ class DNS(object):
         comando_dig = "dig " + dir_ip + " www.ugr.es | head -5 | tail -1"
         dig = subprocess.Popen(['/bin/sh', '-c', comando_dig], stdout=subprocess.PIPE)
         for line in dig.stdout:
-            resultado_dig = str(line)
-        resultado_dig = resultado_dig[resultado_dig.find(":")+1:]
-        resultado_dig = resultado_dig[resultado_dig.find(":")+2:]
-        resultado_dig = resultado_dig[:resultado_dig.find(",")]
+            resultado_dig1 = str(line)
+        resultado_dig2 = resultado_dig1[resultado_dig1.find(":")+1:]
+        resultado_dig3 = resultado_dig2[resultado_dig2.find(":")+2:]
+        resultado_dig = resultado_dig3[:resultado_dig3.find(",")]
         if resultado_dig == "NOERROR":
 
             comando = "ping -c " + str(DNS.NUM_PAQUETES) + " " + dir_ip + "|tail -1"

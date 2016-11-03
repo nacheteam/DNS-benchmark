@@ -43,7 +43,7 @@ class Main(object):
                 hebras[i].join()
             num_hebras+=maxim
             end = time.time()
-        print("La tanda ha tardado " + str(end-start) + " segundos.")
+            print("La tanda ha tardado " + str(end-start) + " segundos.")
 
     #Encuentra el mejor resultado de los obtenidos en el ping.
     def find_best_result():
