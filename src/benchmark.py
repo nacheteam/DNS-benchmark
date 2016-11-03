@@ -48,15 +48,15 @@ class Main(object):
     #Encuentra el mejor resultado de los obtenidos en el ping.
     def find_best_result():
         os.system("clear")
-        DNS.sort_DNS(DNS.medias, DNS.nombres, DNS.ips)
-        DNS.remove_bad_data(DNS.medias, DNS.nombres, DNS.ips)
+        DNS.sort_DNS(DNS.medias_nombres_ips)
+        DNS.remove_bad_data(DNS.medias_nombres_ips)
 
     #Da el mejor resultado encontrado.
     def give_best_result():
         n=len(DNS.vector_nombres)
         os.system("clear")
         print(str(n) + " servidores DNS han sido analizados.")
-        print("El mejor dns ha sido " + DNS.nombres[0] + "-->" + DNS.ips[0] + " con una media de tiempo de " + str(DNS.medias[0]) + " ms")
+        print("El mejor dns ha sido " + DNS.medias_nombres_ips[0][1] + "-->" + DNS.medias_nombres_ips[0][2] + " con una media de tiempo de " + str(DNS.medias_nombres_ips[0][0]) + " ms")
         os.system("rm -rf __pycache__/")
 
     #Escribe los errores encontrados en un fichero externo.
