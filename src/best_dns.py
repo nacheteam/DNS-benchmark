@@ -39,8 +39,7 @@ class DNS(object):
     def get_nombres_medias_ip_Conc(dir_ip, nombre):
         comando_dig = "dig " + dir_ip + " www.ugr.es | head -5 | tail -1"
         dig = subprocess.Popen(['/bin/sh', '-c', comando_dig], stdout=subprocess.PIPE)
-        for line in dig.stdout:
-            resultado_dig1 = str(line)
+        resultado_dig1 = str(dig.communicate()[0])
         resultado_dig2 = resultado_dig1[resultado_dig1.find(":")+1:]
         resultado_dig3 = resultado_dig2[resultado_dig2.find(":")+2:]
         resultado_dig = resultado_dig3[:resultado_dig3.find(",")]
@@ -48,10 +47,7 @@ class DNS(object):
 
             comando = "ping -c " + str(DNS.NUM_PAQUETES) + " " + dir_ip + "|tail -1"
             process = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE)
-            resultado=""
-            for line in process.stdout:
-                resultado = str(line)
-
+            resultado = str(process.communicate()[0])
             media=0
 
             if resultado != "\n":
@@ -76,8 +72,7 @@ class DNS(object):
         for web_page in DNS.testing_webs:
             comando = "dig " + dir_ip + " " + web_page + " | tail -5 | head -1"
             dig = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE)
-            for line in dig.stdout:
-                resultado = str(line)
+            resultado = str(dig.communicate()[0])
             slice1 = resultado[resultado.find(":")+2:]
             dig_time = slice1[:slice1.find(" ")]
             dig_time = float(dig_time)
@@ -91,8 +86,7 @@ class DNS(object):
         for web_page in DNS.testing_webs:
             comando = "dig " + dir_ip + " " + web_page + " | tail -5 | head -1"
             dig = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE)
-            for line in dig.stdout:
-                resultado = str(line)
+            resultado = str(dig.communicate()[0])
             slice1 = resultado[resultado.find(":")+2:]
             dig_time = slice1[:slice1.find(" ")]
             dig_time = float(dig_time)

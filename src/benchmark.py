@@ -11,6 +11,7 @@ class Main(object):
     #Función que pide al usuario el número de hebras que quiere que se utilicen.
     def begining_function():
         os.system("clear")
+        #os.system("sysctl -w fs.file-max=1000000 > /dev/null")
         os.system("rm error_log.txt 2> /dev/null")
         os.system("touch error_log.txt")
         Main.NUM_MAX_HEBRAS = input("Introduzca el número de hebras que quiere usar de manera concurrente: ")
