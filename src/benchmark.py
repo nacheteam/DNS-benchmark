@@ -49,8 +49,12 @@ class Main(object):
     #Encuentra el mejor resultado de los obtenidos en el ping.
     def find_best_result():
         os.system("clear")
-        DNS.sort_DNS(DNS.medias_nombres_ips)
-        DNS.remove_bad_data(DNS.medias_nombres_ips)
+        if len(DNS.medias_nombres_ips)!=0:
+            DNS.sort_DNS(DNS.medias_nombres_ips)
+            DNS.remove_bad_data(DNS.medias_nombres_ips)
+        else:
+            print("Ningún dato fue válido. Ha habido un error con su red.")
+            exit()
 
     #Da el mejor resultado encontrado.
     def give_best_result():

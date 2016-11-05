@@ -38,7 +38,10 @@ class DNS(object):
     #Con dig se comprueba que dicho servidor es capaz de responder querys DNS.
     def get_nombres_medias_ip_Conc(dir_ip, nombre):
         comando_dig = "dig " + dir_ip + " www.ugr.es | head -5 | tail -1"
-        dig = subprocess.Popen(['/bin/sh', '-c', comando_dig], stdout=subprocess.PIPE)
+        dig = subprocess.Popen(['/bin/sh', '-c', comando_dig], stdout=subprocess.PIPE, shell=False)
+        print("antes del wait")
+        dig.wait()
+        print("despues del wait")
         resultado_dig1 = str(dig.communicate()[0])
         resultado_dig2 = resultado_dig1[resultado_dig1.find(":")+1:]
         resultado_dig3 = resultado_dig2[resultado_dig2.find(":")+2:]
@@ -46,7 +49,10 @@ class DNS(object):
         if resultado_dig == "NOERROR":
 
             comando = "ping -c " + str(DNS.NUM_PAQUETES) + " " + dir_ip + "|tail -1"
-            process = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE)
+            process = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE, shell=False)
+            print("antes del wait2")
+            process.wait()
+            print("despues del wait2")
             resultado = str(process.communicate()[0])
             media=0
 
@@ -71,12 +77,16 @@ class DNS(object):
         total = 0
         for web_page in DNS.testing_webs:
             comando = "dig " + dir_ip + " " + web_page + " | tail -5 | head -1"
-            dig = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE)
+            dig = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE, shell=False)
+            print("antes del wait3")
+            dig.wait()
+            print("despues del wait3")
             resultado = str(dig.communicate()[0])
             slice1 = resultado[resultado.find(":")+2:]
             dig_time = slice1[:slice1.find(" ")]
-            dig_time = float(dig_time)
-            total+=dig_time
+            if isfloat(dig_time):
+                dig_time = float(dig_time)
+                total+=dig_time
         dig_media = float(total/len(DNS.testing_webs))
         return dig_media
 
@@ -85,13 +95,17 @@ class DNS(object):
         worst = 0
         for web_page in DNS.testing_webs:
             comando = "dig " + dir_ip + " " + web_page + " | tail -5 | head -1"
-            dig = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE)
+            dig = subprocess.Popen(['/bin/sh', '-c', comando], stdout=subprocess.PIPE, shell=False)
+            print("antes del wait3")
+            dig.wait()
+            print("despues del wait3")
             resultado = str(dig.communicate()[0])
             slice1 = resultado[resultado.find(":")+2:]
             dig_time = slice1[:slice1.find(" ")]
-            dig_time = float(dig_time)
-            if worst<dig_time:
-                worst=dig_time
+            if isfloat(dig_time):
+                dig_time = float(dig_time)
+                if worst<dig_time:
+                    worst=dig_time
         return worst
 
     #Con el vector de medias final, el de nombre y el de ips la función se encarga de ordenar el vector de medias de menor a mayor y el resto de los vectores se ordenan en consonancia con ello.
